@@ -13,6 +13,9 @@ Rottenpotatoes::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
   resources :movies
+  
+  # Route that posts Find Movies with Same Director
+  post '/movies/find_movies_with_same_director'
 
   # Sample resource route with options:
   #   resources :products do
