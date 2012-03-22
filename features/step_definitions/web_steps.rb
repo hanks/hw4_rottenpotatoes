@@ -103,10 +103,17 @@ When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"$/ do |path, field|
 end
 
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
-  if page.respond_to? :should
-    page.should have_content(text)
+  if text.include?("has no director info") 
+    m = /\b(\w+)\b/.match(text)
+    movie_name = m[0]
+    pattern = /<td>#{movie_name}<\/td>.*<td>.*<\/td>.*<td>.*<\/td>.*<td><\/td>/m
+    assert_equal true, (page.body =~ pattern) == nil
   else
-    assert page.has_content?(text)
+    if page.respond_to? :should
+      page.should have_content(text)
+    else
+      assert page.has_content?(text)
+    end
   end
 end
 
@@ -229,6 +236,7 @@ end
  
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
+  current_path = URI.unescape(current_path)
   if current_path.respond_to? :should
     current_path.should == path_to(page_name)
   else
